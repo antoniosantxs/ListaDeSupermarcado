@@ -11,13 +11,13 @@
 <div class="container my-4">
     <h1 class="mb-4">🛒 Lista de Supermercado & Controle de Estoque</h1>
 
-    <!-- mensagens ao usuario - Tratamento sucesso e erro -->
-    <div th:if="${msgSucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${msgSucesso}"></span>
+    <!-- mensagens ao usuario, nomes iguais aos do controller -->
+    <div th:if="${mensagemSucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${mensagemSucesso}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
-    <div th:if="${msgErro}" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span th:text="${msgErro}"></span>
+    <div th:if="${mensagemErro}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${mensagemErro}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
@@ -45,7 +45,11 @@
                 <a th:href="@{/itens(campo='nome', ordem='asc')}" class="text-white text-decoration-none">Nome 🔼</a>
                 <a th:href="@{/itens(campo='nome', ordem='desc')}" class="text-white text-decoration-none">🔽</a>
             </th>
-            <th>Categoria</th>
+            <!-- ordenação por categoria -->
+            <th>
+                <a th:href="@{/itens(campo='categoria', ordem='asc')}" class="text-white text-decoration-none">Categoria 🔼</a>
+                <a th:href="@{/itens(campo='categoria', ordem='desc')}" class="text-white text-decoration-none">🔽</a>
+            </th>
             <th>Estoque Atual</th>
             <th>Estoque Mín.</th>
             <th>Status</th>
@@ -69,10 +73,10 @@
                 <!-- permitir a edição -->
                 <a th:href="@{/itens/editar/{id}(id=${item.id})}" class="btn btn-warning btn-sm">Editar</a>
 
-                <!-- exclusão de item -->
-                <form th:action="@{/itens/{id}(id=${item.id})}" th:method="delete" class="d-inline">
-                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deseja excluir este item?')">Excluir</button>
-                </form>
+                <!-- exclusão de item, GET em /itens/excluir/{id} como no controller -->
+                <a th:href="@{/itens/excluir/{id}(id=${item.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Deseja excluir este item?')">Excluir</a>
             </td>
         </tr>
         <tr th:if="${#lists.isEmpty(itens)}">

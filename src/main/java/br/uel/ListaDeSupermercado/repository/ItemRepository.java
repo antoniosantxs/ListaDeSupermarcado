@@ -18,4 +18,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     //Ordenacao por Quantidade
     List<Item> findAllByOrderByQuantidadeAsc();
     List<Item> findAllByOrderByQuantidadeDesc();
+
+    List<Item> findAllByOrderByCategoriaAsc();
+    List<Item> findAllByOrderByCategoriaDesc();
+    List<Item> findAllByOrderByPrecoUnitarioAsc();
+    List<Item> findAllByOrderByPrecoUnitarioDesc();
+
 }

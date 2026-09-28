@@ -28,7 +28,6 @@ public class ItemService {
         }
         return repository.findByNomeContainingIgnoreCase(nome);
     }
-
     // Ordenação dinâmica por campo e ordem (asc/desc)
     public List<Item> listarOrdenado(String campo, String ordem) {
         boolean desc = "desc".equalsIgnoreCase(ordem);
@@ -38,10 +37,21 @@ public class ItemService {
                     : repository.findAllByOrderByQuantidadeAsc();
         }
 
+        // NOVO: ordenação por categoria
+        if ("categoria".equalsIgnoreCase(campo)) {
+            return desc ? repository.findAllByOrderByCategoriaDesc()
+                    : repository.findAllByOrderByCategoriaAsc();
+        }
+
+        // NOVO: ordenação por preço
+        if ("precoUnitario".equalsIgnoreCase(campo)) {
+            return desc ? repository.findAllByOrderByPrecoUnitarioDesc()
+                    : repository.findAllByOrderByPrecoUnitarioAsc();
+        }
+
         return desc ? repository.findAllByOrderByNomeDesc()
                 : repository.findAllByOrderByNomeAsc();
     }
-
     // Salva/Atualiza o registro
     public Item salvar(Item item) {
         return repository.save(item);
