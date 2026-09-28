@@ -8,14 +8,14 @@ import java.util.List;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    //Busca por nome - case insensitive
+    //pesquisa por nome (ignora a diferença de maiúsculas e minúsculas)
     List<Item> findByNomeContainingIgnoreCase(String nome);
 
-    //Ordenação por Nome
-    List<Item> findAllByOrderByNomeAsc(); //lista ascendente
-    List<Item> findAllByOrderByNomeDesc(); //lista descentente
+    //Ordenacao por Nome
+    List<Item> findAllByOrderByNomeAsc();
+    List<Item> findAllByOrderByNomeDesc();
 
-    //Ordenação pela Quantidade a Comprar
-    List<Item> findAllByOrderByQuantidadeComprarAsc(); //lista ascendente
-    List<Item> findAllByOrderByQuantidadeComprarDesc(); //lista descendente
+    //Ordenacao por Quantidade
+    List<Item> findAllByOrderByQuantidadeAsc();
+    List<Item> findAllByOrderByQuantidadeDesc();
 }

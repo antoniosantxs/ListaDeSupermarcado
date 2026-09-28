@@ -11,59 +11,58 @@ public class ItemService {
 
     private final ItemRepository repository;
 
-    // Injeção de dependência do Repository
+    // Injeção de dependência via construtor
     public ItemService(ItemRepository repository) {
         this.repository = repository;
     }
 
-    // Aceita busca e ordenação em uma única chamada para a Controller
-    public List<Item> listarTodos(String buscar, String ordem) {
-        // Se houver termo de busca, filtra por nome
-        if (buscar != null && !buscar.isBlank()) {
-            return repository.findByNomeContainingIgnoreCase(buscar);
-        }
-
-        // Se houver parâmetro de ordenação
-        if (ordem != null && !ordem.isBlank()) {
-            switch (ordem.toLowerCase()) {
-                case "nome_asc":
-                case "asc":
-                    return repository.findAllByOrderByNomeAsc();
-                case "nome_desc":
-                case "desc":
-                    return repository.findAllByOrderByNomeDesc();
-                case "qtd_asc":
-                    return repository.findAllByOrderByQuantidadeAsc();
-                case "qtd_desc":
-                    return repository.findAllByOrderByQuantidadeDesc();
-            }
-        }
-
-        // Retorno padrão sem filtros
-        return repository.findAll();
-    }
-
-    // Sobrecarga sem argumentos para casos de listagem simples
+    // Listagem padrão
     public List<Item> listarTodos() {
         return repository.findAll();
     }
 
-    // Salva ou atualiza registros no banco
+    // Busca por termo no nome
+    public List<Item> buscarPorNome(String nome) {
+        if (nome == null || nome.isBlank()) {
+            return repository.findAll();
+        }
+        return repository.findByNomeContainingIgnoreCase(nome);
+    }
+
+    // Ordenação dinâmica por campo e ordem (asc/desc)
+    public List<Item> listarOrdenado(String campo, String ordem) {
+        boolean desc = "desc".equalsIgnoreCase(ordem);
+
+        if ("quantidade".equalsIgnoreCase(campo) || "qtd".equalsIgnoreCase(campo)) {
+            return desc ? repository.findAllByOrderByQuantidadeDesc()
+                    : repository.findAllByOrderByQuantidadeAsc();
+        }
+
+        return desc ? repository.findAllByOrderByNomeDesc()
+                : repository.findAllByOrderByNomeAsc();
+    }
+
+    // Salva/Atualiza o registro
     public Item salvar(Item item) {
         return repository.save(item);
     }
 
-    // Busca um item por ID
+    // Busca por ID passando apenas o parâmetro 'id' (Long) para a exceção
     public Item buscarPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ItemNaoEncontradoException(id));
     }
 
-    // Método renomeado para excluirPorId para corresponder à chamada da Controller
-    public void excluirPorId(Long id) {
+    // Exclusão verificando existência prévia
+    public void excluir(Long id) {
         if (!repository.existsById(id)) {
             throw new ItemNaoEncontradoException(id);
         }
         repository.deleteById(id);
+    }
+
+    // Alias/Sobrecarga para compatibilidade com excluirPorId
+    public void excluirPorId(Long id) {
+        this.excluir(id);
     }
 }
