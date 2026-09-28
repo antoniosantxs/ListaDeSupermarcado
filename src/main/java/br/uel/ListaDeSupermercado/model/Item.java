@@ -59,7 +59,7 @@ public class Item {
     public Item() {
     }
 
-    // Construtor Parametrizado Corrigido
+    // Construtor Parametrizado
     public Item(String nome, Integer quantidade, String categoria, Double precoUnitario,
                 Boolean comprado, String unidadeMedida, Integer quantidadeEstoque, Integer estoqueMinimo) {
         this.nome = nome;
@@ -72,7 +72,7 @@ public class Item {
         this.estoqueMinimo = estoqueMinimo;
     }
 
-    // Método de Negócio para o Status do Estoque (Protegido contra NullPointer)
+    // Método de definição do Status do Estoque
     public String getStatusEstoque() {
         if (estoqueMinimo == null || quantidadeEstoque == null) {
             return "Sem Controle";
@@ -134,7 +134,6 @@ public class Item {
         return comprado;
     }
 
-    // RESOLVE O ERRO DO ItemService: Método de conveniência/atalho boolean
     public Boolean isComprado() {
         return comprado;
     }
