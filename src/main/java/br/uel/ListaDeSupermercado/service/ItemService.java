@@ -1,6 +1,7 @@
 package br.uel.ListaDeSupermercado.service;
 
 import br.uel.ListaDeSupermercado.model.Item;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -91,4 +92,6 @@ public class ItemService {
         lista.sort(comparador);
         return lista;
     }
+
+    public Item salvar(@Valid Item item) { return repository.save(item);}
 }
