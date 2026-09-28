@@ -1,10 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Formulário de Item</title>
+    <!-- CSS do Bootstrap 5 via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
+
+<div class="container my-5" style="max-width: 600px;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0" th:text="${item.id == null ? 'Cadastrar Novo Item' : 'Editar Item'}">Formulário</h3>
+        </div>
+        <div class="card-body">
+            <!-- Suporte dinâmico cadastro e edição dos itens -->
+            <form th:action="${item.id == null ? '/itens' : '/itens/' + item.id}"
+                  th:object="${item}"
+                  th:method="${item.id == null ? 'post' : 'put'}">
+
+                <!-- criar id do item cadastrado -->
+                <input type="hidden" th:field="*{id}" />
+
+                <!-- inserção do nome do item -->
+                <div class="mb-3">
+                    <label class="form-label">Nome do Item *</label>
+                    <input type="text" th:field="*{nome}" class="form-control" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'" placeholder="Ex: Leite Integral">
+                    <div class="invalid-feedback" th:errors="*{nome}"></div>
+                </div>
+
+                <!-- inserção da categoria -->
+                <div class="mb-3">
+                    <label class="form-label">Categoria *</label>
+                    <input type="text" th:field="*{categoria}" class="form-control" th:classappend="${#fields.hasErrors('categoria')} ? 'is-invalid'" placeholder="Ex: Laticínios">
+                    <div class="invalid-feedback" th:errors="*{categoria}"></div>
+                </div>
+
+                <!-- unidade de medida -->
+                <div class="mb-3">
+                    <label class="form-label">Unidade de Medida (Opcional)</label>
+                    <input type="text" th:field="*{unidadeMedida}" class="form-control" placeholder="Ex: Litro, Kg, Unidade">
+                </div>
+
+                <div class="row">
+                    <!-- preço unitário -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Preço Unitário (R$)</label>
+                        <input type="number" step="0.01" th:field="*{precoUnitario}" class="form-control" th:classappend="${#fields.hasErrors('precoUnitario')} ? 'is-invalid'">
+                        <div class="invalid-feedback" th:errors="*{precoUnitario}"></div>
+                    </div>
+
+                    <!-- quantidade em estoque - pensando no controle de estoque -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Quantidade em Estoque</label>
+                        <input type="number" th:field="*{quantidadeEstoque}" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- estoque mínimo -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Estoque Mínimo</label>
+                        <input type="number" th:field="*{estoqueMinimo}" class="form-control">
+                    </div>
+
+                    <!-- quantidade que deseja comprar -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Quantidade que deseja comprar</label>
+                        <input type="number" th:field="*{quantidadeComprar}" class="form-control">
+                    </div>
+                </div>
+
+                <!-- botôes de ação -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a th:href="@{/itens}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-success">Salvar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
